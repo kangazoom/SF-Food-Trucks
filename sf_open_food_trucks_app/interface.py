@@ -1,8 +1,4 @@
-
-def get_open_food_truck_list():
-    for num in range(1, 11):
-        print('1: FOOD TRUCK + ADDRESS')
-
+from api_wrapper import get_open_food_truck_list
 
 def get_current_date_time():
     return '1/1/1970 00:00:00:00Z'
@@ -37,7 +33,7 @@ def show_user_interface():
         'Would you like to see which other food trucks are open? (Y/N)')
     print(user_input)
     if user_input == 'y'.upper():
-        get_open_food_truck_list()  # show ten more trucks
+        print(get_open_food_truck_list())  # show ten more trucks
         # if no more trucks to show print('That\'s all for now') end of the line
         # else show trucks
     elif user_input == 'n'.upper():
