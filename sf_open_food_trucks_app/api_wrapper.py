@@ -4,6 +4,8 @@ import requests
 from food_truck import FoodTruck
 from current_date_time import CurrentDateTime
 
+# make a class --> offset index for ex
+
 def get_open_food_truck_list(offset_index):
     response = fetch_food_truck_data(offset_index)
     # print(response)
@@ -21,15 +23,13 @@ def build_query_collection(offset_index):
     print(day_of_week_num)
     print(now.hour)
     print(now.minute)
-    start_time_boundary = 'start24<=' +  now.current_time_as_string()
-    end_time_boundary = 'end24>=' +  now.current_time_as_string()
-    complete_time_boundary = start_time_boundary + ' and ' + end_time_boundary
+    time_boundary = now.current_time_as_string() + ' between start24 and end24' # inclusive
     query_string = (
     '?' + '$limit=' + output_length
     + '&' + '$offset=' + start_from_index
     + '&' + 'dayorder=' + day_of_week_num
     + '&' + '$order=' + sort_alpha_by
-    + '&' + '$where=' + complete_time_boundary)
+    + '&' + '$where=' + time_boundary)
     return query_string
 
 def fetch_food_truck_data(offset_index):
