@@ -1,14 +1,21 @@
+import json
 import requests
+from food_truck import FoodTruck
 
 def get_open_food_truck_list():
-    response = send_get_request()
+    response = fetch_food_truck_data()
+    # print(response)
     print(response.status_code)
+    # print(response.raw)
+    # print(response.text)
+    # print(response.value)
+    # print(response.data)
     for _ in range(1, 11):
         print('1: FOOD TRUCK + ADDRESS')
-    return parse_response(response)
+    parse_response(response)
 
 
-def send_get_request():
+def fetch_food_truck_data():
     base_url = 'https://data.sfgov.org/resource/jjew-r69b.json'
     limit_query = str(20)
     response = requests.get(base_url + '?' + '$limit=' + limit_query)
@@ -16,4 +23,16 @@ def send_get_request():
 
 
 def parse_response(response):
-    return response.json()
+    if response.status_code == 200:
+        response = json.loads(response.text)
+        open_food_truck_object_collection = []
+        for item in response:
+            food_truck = FoodTruck()
+            food_truck.name = item['applicant']
+            food_truck.address = item['location']
+            food_truck.day_open = item['dayofweekstr']
+            food_truck.start_time = item['start24']
+            food_truck.end_time = item['end24']
+            print(food_truck.name)
+            open_food_truck_object_collection.append(food_truck)
+    return open_food_truck_object_collection
