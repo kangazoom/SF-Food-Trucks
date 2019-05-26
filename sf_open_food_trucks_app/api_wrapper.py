@@ -1,10 +1,14 @@
 import datetime
 import json
 import requests
+from dotenv import load_dotenv
+import os
 from food_truck import FoodTruck
 from current_date_time import CurrentDateTime
 
-# make a class --> offset index for ex
+# make a class --> offset index for ex - for wrapper and/or for query
+# singleton?
+# add token .env
 
 def get_open_food_truck_list(offset_index):
     response = fetch_food_truck_data(offset_index)
@@ -16,6 +20,8 @@ def build_query_collection(offset_index):
     # queries
     # select
     now = CurrentDateTime(datetime.datetime.now())
+    load_dotenv()
+    app_token = os.environ.get('APP_TOKEN')
     output_length = str(10)
     start_from_index = str(offset_index)
     day_of_week_num = now.day_of_the_week
@@ -25,11 +31,12 @@ def build_query_collection(offset_index):
     print(now.minute)
     time_boundary = now.current_time_as_string() + ' between start24 and end24' # inclusive
     query_string = (
-    '?' + '$limit=' + output_length
-    + '&' + '$offset=' + start_from_index
-    + '&' + 'dayorder=' + day_of_week_num
-    + '&' + '$order=' + sort_alpha_by
-    + '&' + '$where=' + time_boundary)
+    '?' + '$$app_token=' + app_token 
+    + '&' + 'dayorder=' + day_of_week_num 
+    + '&' + '$order=' + sort_alpha_by 
+    + '&' + '$where=' + time_boundary 
+    + '&' + '$limit=' + output_length 
+    + '&' + '$offset=' + start_from_index)
     return query_string
 
 def fetch_food_truck_data(offset_index):

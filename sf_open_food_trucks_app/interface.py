@@ -40,6 +40,7 @@ def show_user_interface():
     user_input = input(
         'Would you like to see which other food trucks are open? (Y/N)').upper()
     print(user_input)
+    # clear page - 10 at a time?
     if user_input == 'Y':
         truck_starting_at_index += 10
         truck_collection = get_open_food_truck_list(truck_starting_at_index)
