@@ -25,18 +25,32 @@ def show_user_interface():
     print('Welcome to the San Francisco Food Truck Finder!')
     print('\n')
     print('The following food trucks are currently open:')
-    current_date_time = get_current_date_time()
+    truck_starting_at_index = 0
+    current_date_time = get_current_date_time() # no
     print(f"(as of {current_date_time}")
-    get_open_food_truck_list()  # show first ten trucks
+    truck_collection = get_open_food_truck_list(truck_starting_at_index)  # show first ten trucks
+    for truck in truck_collection:
+        print('\n')
+        print(truck.name.upper())
+        print(truck.day_open)
+        print(truck.address)
+        print(truck.start_time)
+        print(truck.end_time)
     print('\n')
     user_input = input(
-        'Would you like to see which other food trucks are open? (Y/N)')
+        'Would you like to see which other food trucks are open? (Y/N)').upper()
     print(user_input)
-    if user_input == 'y'.upper():
-        print(get_open_food_truck_list())  # show ten more trucks
-        # if no more trucks to show print('That\'s all for now') end of the line
-        # else show trucks
-    elif user_input == 'n'.upper():
+    if user_input == 'Y':
+        truck_starting_at_index += 10
+        truck_collection = get_open_food_truck_list(truck_starting_at_index)
+        print(truck_collection)
+        if truck_collection and isinstance(truck_collection, list):
+            print(truck_collection)
+        elif not truck_collection and isinstance(truck_collection, list):
+            print('That\'s all for now. Goodbye!')
+        else:
+            raise Exception('Error!!!')
+    elif user_input == 'N':
         print('Thanks for using our app. We predict deliciousness in your future.')
         print('Type Q to quit')
         # if user_input = q close program

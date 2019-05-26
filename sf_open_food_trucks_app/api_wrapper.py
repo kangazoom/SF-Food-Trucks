@@ -2,58 +2,44 @@ import datetime
 import json
 import requests
 from food_truck import FoodTruck
+from current_date_time import CurrentDateTime
 
-def get_open_food_truck_list():
-    response = fetch_food_truck_data()
+def get_open_food_truck_list(offset_index):
+    response = fetch_food_truck_data(offset_index)
     # print(response)
     print(response.status_code)
-    # print(response.raw)
-    # print(response.text)
-    # print(response.value)
-    # print(response.data)
-    for _ in range(1, 11):
-        print('1: FOOD TRUCK + ADDRESS')
-    parse_response(response)
+    return parse_response(response) # return parsed response
 
-def current_date_time():
-    now = datetime.datetime.now()
-    # day_of_the_week = now.day
-    # hour = now.hour
-    # minute = now.minute
-    # second = now.second
-    # microsecondond = now.microsecond
-    return now
-
-def build_query_collection():
+def build_query_collection(offset_index):
     # queries
     # select
-    now = current_date_time()
-    limit = str(20)
-    day_of_week_num = str(now.isoweekday())
+    now = CurrentDateTime(datetime.datetime.now())
+    output_length = str(10)
+    start_from_index = str(offset_index)
+    day_of_week_num = now.day_of_the_week
     sort_alpha_by = 'applicant'
-    current_time_as_string = '\'' + str(now.hour) + ':' + str(now.minute) + '\''
-    start_time_boundary = 'start24<=' +  current_time_as_string
-    end_time_boundary = 'end24>=' +  current_time_as_string
+    print(day_of_week_num)
+    print(now.hour)
+    print(now.minute)
+    start_time_boundary = 'start24<=' +  now.current_time_as_string()
+    end_time_boundary = 'end24>=' +  now.current_time_as_string()
     complete_time_boundary = start_time_boundary + ' and ' + end_time_boundary
     query_string = (
-    '?' + '$limit=' + limit 
+    '?' + '$limit=' + output_length
+    + '&' + '$offset=' + start_from_index
     + '&' + 'dayorder=' + day_of_week_num
     + '&' + '$order=' + sort_alpha_by
     + '&' + '$where=' + complete_time_boundary)
     return query_string
-    
-    
 
-
-def fetch_food_truck_data():
+def fetch_food_truck_data(offset_index):
     base_url = 'https://data.sfgov.org/resource/jjew-r69b.json'
-    query_string = build_query_collection()
-    response = requests.get(base_url + query_string)
-    return response
-
+    query_string = build_query_collection(offset_index)
+    return requests.get(base_url + query_string) # return raw response
 
 def parse_response(response):
     if response.status_code == 200:
+        # if []
         response = json.loads(response.text)
         open_food_truck_object_collection = []
         for item in response:
@@ -63,10 +49,10 @@ def parse_response(response):
             food_truck.day_open = item['dayofweekstr']
             food_truck.start_time = item['start24']
             food_truck.end_time = item['end24']
-            print(food_truck.name)
-            print(food_truck.address)
-            print(food_truck.day_open)
-            print(food_truck.start_time)
-            print(food_truck.end_time)
+            # print(food_truck.name)
+            # print(food_truck.address)
+            # print(food_truck.day_open)
+            # print(food_truck.start_time)
+            # print(food_truck.end_time)
             open_food_truck_object_collection.append(food_truck)
-    return open_food_truck_object_collection
+    return open_food_truck_object_collection # return list of open food trucks as objects
