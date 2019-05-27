@@ -5,10 +5,8 @@ class CurrentDateTime:
         self.hour = self.format_hour(now.hour)
         self.minute = self.format_minute(now.minute)
 
-    def current_time_as_string(self):
+    def format_current_time_as_string(self):
         return '\'' + str(self.hour) + ':' + str(self.minute) + '\''
-
-    # reformatting here? for endpoint?
 
     def shift_week_start_num(self, weekday_num): # start the week on Sunday, not Monday + use ordinal counting
         weekday_num = str(weekday_num)

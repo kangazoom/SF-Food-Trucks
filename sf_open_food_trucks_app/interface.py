@@ -1,71 +1,37 @@
 from api_wrapper import SFDataService
-
-def get_current_date_time():
-    return '1/1/1970 00:00:00:00Z'
-
-
-def handle_invalid_input():
-    print('Your selection was invalid. Let\'s try again.')
-
-
-def display_valid_input():
-    # user_input =
-    # if exist
-    print('Type [Y] to see which other food trucks are open right now.')
-    print('Type [N] if you do not want to view more food trucks.')  # if exist
-    print('Type [Q] to quit this program.')
-
-
-def handle_user_input(user_input):
-    return
-
+import display_text
 
 def show_user_interface():
-
-    print('Welcome to the San Francisco Food Truck Finder!')
-    print('\n')
-    print('The following food trucks are currently open:')
+    prompt_user = True       
+    display_text.print_welcome_message()
     sf_data_service = SFDataService()
-    # truck_starting_at_index = 0
-    current_date_time = get_current_date_time() # no
-    print(f"(as of {current_date_time}")
-    truck_collection = sf_data_service.get_open_food_truck_list()  # show first ten trucks
-    for truck in truck_collection:
-        print('\n')
-        print(truck.name.upper())
-        print(truck.day_open)
-        print(truck.address)
-        print(truck.start_time)
-        print(truck.end_time)
-    print('\n')
-    user_input = input(
-        'Would you like to see which other food trucks are open? (Y/N)').upper()
-    print(user_input)
-    # clear page - 10 at a time?
-    if user_input == 'Y':
-        # truck_starting_at_index += 10
-        truck_collection = sf_data_service.get_open_food_truck_list()
-        # print(truck_collection)
-        if truck_collection and isinstance(truck_collection, list):
-            for truck in truck_collection:
-                print('\n')
-                print(truck.name.upper())
-                print(truck.day_open)
-                print(truck.address)
-                print(truck.start_time)
-                print(truck.end_time)
-        elif not truck_collection and isinstance(truck_collection, list):
-            print('That\'s all for now. Goodbye!')
-        else:
-            raise Exception('Error!!!')
-    elif user_input == 'N':
-        print('Thanks for using our app. We predict deliciousness in your future.')
-        print('Type Q to quit')
-        # if user_input = q close program
-        # else do_not_understand()
+    truck_collection = sf_data_service.get_open_food_truck_list()
+    if isinstance(truck_collection, list) and truck_collection:
+        display_text.print_date_time_fetched(sf_data_service.date_time_fetched.now)
+        display_text.print_valid_food_truck_list(truck_collection) # show first ten trucks
+    elif isinstance(truck_collection, list) and not truck_collection:
+        display_text.print_empty_food_truck_list()
+        prompt_user = False
     else:
-        # user typed a command we don't understand
-        print('idk')
+        raise Exception('Bad format - Unable to print results')
+    while prompt_user:
+        user_input = input(display_text.prompt_user_to_view_more_trucks()).upper()
+        if user_input == 'Y':
+            display_text.print_date_time_fetched(sf_data_service.date_time_fetched.now)
+            truck_collection = sf_data_service.get_open_food_truck_list()
+            if isinstance(truck_collection, list) and truck_collection:
+                display_text.print_valid_food_truck_list(truck_collection)
+            elif isinstance(truck_collection, list) and not truck_collection:
+                display_text.print_date_time_fetched
+                display_text.print_at_end_of_food_truck_list()
+                prompt_user = False
+            else:
+                raise Exception('Bad format - Unable to print results')
+        elif user_input == 'N':
+            prompt_user = False
+        else:
+            display_text.print_invalid_input()
+    display_text.quit_program()
 
 if __name__ == '__main__':
     show_user_interface()
