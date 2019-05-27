@@ -1,15 +1,16 @@
+from datetime import datetime
 from pytz import timezone
 
-class CurrentDateTime:
-    def __init__(self, now):
-        # self.now = self.standardize_to_pt_time(now)
-        self.date_time = self.standardize_to_pt_time(now)
-        self.day_of_the_week = self.shift_week_start_num(now.isoweekday())
-        self.hour = self.format_hour(now.hour)
-        self.minute = self.format_minute(now.minute)
+class DateTimeManager:
+    def __init__(self):
+        self.now = datetime.now()
+        self.date_time_in_pt = self.standardize_to_pt_time(datetime.now())
+        self.day_of_the_week = self.shift_week_start_num(self.date_time_in_pt.isoweekday())
+        self.hour = self.format_hour(self.date_time_in_pt.hour)
+        self.minute = self.format_minute(self.date_time_in_pt.minute)
 
-    def standardize_to_pt_time(self, now):
-        return now.astimezone(timezone('US/Pacific'))
+    def standardize_to_pt_time(self, date_time):
+        return date_time.astimezone(timezone('US/Pacific'))
 
     def format_current_time_as_string(self):
         return '\'' + str(self.hour) + ':' + str(self.minute) + '\''

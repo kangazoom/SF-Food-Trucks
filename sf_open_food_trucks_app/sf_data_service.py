@@ -1,15 +1,14 @@
-import datetime
 import json
 import requests
 import os
 from dotenv import load_dotenv
 from food_truck import FoodTruck
-from current_date_time import CurrentDateTime
+from date_time_manager import DateTimeManager
 
 class SFDataService:
 	def __init__(self):
 		self.pagination_index = None
-		self.when_data_was_requested = CurrentDateTime(datetime.datetime.now())
+		self.timestamp = DateTimeManager()
 
 	def get_open_food_truck_list(self):
 		self.increment_pagination()
@@ -32,10 +31,11 @@ class SFDataService:
 		attribute_list = 'applicant, location'
 		output_length = str(10)
 		start_from_index = str(self.pagination_index)
-		timestamp = self.when_data_was_requested
-		day_of_week_num = timestamp.day_of_the_week
+		self.timestamp
+		print(self.timestamp.format_hour(1))
+		day_of_week_num = self.timestamp.day_of_the_week
 		sort_alpha_by = 'applicant, location'
-		time_boundary = timestamp.format_current_time_as_string() + ' between start24 and end24'  # inclusive
+		time_boundary = self.timestamp.format_current_time_as_string() + ' between start24 and end24'  # inclusive
 		query_string = (
 			'?' + '$$app_token=' + app_token
 			+ '&' + '$select=' + attribute_list

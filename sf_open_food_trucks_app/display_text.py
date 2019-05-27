@@ -1,6 +1,3 @@
-from api_wrapper import SFDataService
-from current_date_time import CurrentDateTime
-
 def print_welcome_message():
     print('\n')
     print('Welcome to the San Francisco Food Truck Finder!')
