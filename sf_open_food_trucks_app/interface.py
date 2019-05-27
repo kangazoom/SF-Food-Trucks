@@ -1,4 +1,4 @@
-from api_wrapper import get_open_food_truck_list
+from api_wrapper import SFDataService
 
 def get_current_date_time():
     return '1/1/1970 00:00:00:00Z'
@@ -25,10 +25,11 @@ def show_user_interface():
     print('Welcome to the San Francisco Food Truck Finder!')
     print('\n')
     print('The following food trucks are currently open:')
-    truck_starting_at_index = 0
+    sf_data_service = SFDataService()
+    # truck_starting_at_index = 0
     current_date_time = get_current_date_time() # no
     print(f"(as of {current_date_time}")
-    truck_collection = get_open_food_truck_list(truck_starting_at_index)  # show first ten trucks
+    truck_collection = sf_data_service.get_open_food_truck_list()  # show first ten trucks
     for truck in truck_collection:
         print('\n')
         print(truck.name.upper())
@@ -42,11 +43,17 @@ def show_user_interface():
     print(user_input)
     # clear page - 10 at a time?
     if user_input == 'Y':
-        truck_starting_at_index += 10
-        truck_collection = get_open_food_truck_list(truck_starting_at_index)
-        print(truck_collection)
+        # truck_starting_at_index += 10
+        truck_collection = sf_data_service.get_open_food_truck_list()
+        # print(truck_collection)
         if truck_collection and isinstance(truck_collection, list):
-            print(truck_collection)
+            for truck in truck_collection:
+                print('\n')
+                print(truck.name.upper())
+                print(truck.day_open)
+                print(truck.address)
+                print(truck.start_time)
+                print(truck.end_time)
         elif not truck_collection and isinstance(truck_collection, list):
             print('That\'s all for now. Goodbye!')
         else:
