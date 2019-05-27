@@ -1,9 +1,15 @@
+from pytz import timezone
+
 class CurrentDateTime:
     def __init__(self, now):
-        self.now = now
+        # self.now = self.standardize_to_pt_time(now)
+        self.date_time = self.standardize_to_pt_time(now)
         self.day_of_the_week = self.shift_week_start_num(now.isoweekday())
         self.hour = self.format_hour(now.hour)
         self.minute = self.format_minute(now.minute)
+
+    def standardize_to_pt_time(self, now):
+        return now.astimezone(timezone('US/Pacific'))
 
     def format_current_time_as_string(self):
         return '\'' + str(self.hour) + ':' + str(self.minute) + '\''

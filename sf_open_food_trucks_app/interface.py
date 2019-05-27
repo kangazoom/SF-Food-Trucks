@@ -7,7 +7,7 @@ def show_user_interface():
     sf_data_service = SFDataService()
     truck_collection = sf_data_service.get_open_food_truck_list()
     if isinstance(truck_collection, list) and truck_collection:
-        display_text.print_date_time_fetched(sf_data_service.date_time_fetched.now)
+        display_text.print_date_time_fetched(sf_data_service.when_data_was_requested.date_time)
         display_text.print_valid_food_truck_list(truck_collection) # show first ten trucks
     elif isinstance(truck_collection, list) and not truck_collection:
         display_text.print_empty_food_truck_list()
@@ -17,7 +17,7 @@ def show_user_interface():
     while prompt_user:
         user_input = input(display_text.prompt_user_to_view_more_trucks()).upper()
         if user_input == 'Y':
-            display_text.print_date_time_fetched(sf_data_service.date_time_fetched.now)
+            display_text.print_date_time_fetched(sf_data_service.when_data_was_requested.date_time)
             truck_collection = sf_data_service.get_open_food_truck_list()
             if isinstance(truck_collection, list) and truck_collection:
                 display_text.print_valid_food_truck_list(truck_collection)

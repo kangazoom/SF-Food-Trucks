@@ -17,17 +17,14 @@ def prompt_user_to_view_more_trucks():
 
 def print_date_time_fetched(date_time):
     formatted_date_time = date_time.strftime("%A %B %d, %Y at %I:%M:%S %p")
-    print(f"Fetching data from: {formatted_date_time} ...")
+    print(f"... Fetching data from: {formatted_date_time} local SF time ...")
 
 def print_valid_food_truck_list(truck_collection):
     print('The following food trucks are currently open:')
     print('\n')
     for truck in truck_collection:
         print(truck.name.upper())
-        # print(truck.day_open) # no
         print(truck.address.title())
-        # print(truck.start_time) # no
-        # print(truck.end_time) # no
         print('\n')
 
 def print_empty_food_truck_list():

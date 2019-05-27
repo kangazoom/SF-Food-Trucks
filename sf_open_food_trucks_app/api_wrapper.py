@@ -9,7 +9,7 @@ from current_date_time import CurrentDateTime
 class SFDataService:
 	def __init__(self):
 		self.pagination_index = None
-		self.date_time_fetched = CurrentDateTime(datetime.datetime.now())
+		self.when_data_was_requested = CurrentDateTime(datetime.datetime.now())
 
 	def get_open_food_truck_list(self):
 		self.increment_pagination()
@@ -28,15 +28,14 @@ class SFDataService:
 			self.pagination_index += 10
 
 	def build_query_collection(self):
-		# queries
 		app_token = self.get_app_token()
-		attribute_list = 'applicant, location, dayofweekstr, start24, end24' # TODO: remove last three
+		attribute_list = 'applicant, location'
 		output_length = str(10)
 		start_from_index = str(self.pagination_index)
-		now = self.date_time_fetched
-		day_of_week_num = now.day_of_the_week
-		sort_alpha_by = 'applicant, location' # location?
-		time_boundary = now.format_current_time_as_string() + ' between start24 and end24'  # inclusive
+		timestamp = self.when_data_was_requested
+		day_of_week_num = timestamp.day_of_the_week
+		sort_alpha_by = 'applicant, location'
+		time_boundary = timestamp.format_current_time_as_string() + ' between start24 and end24'  # inclusive
 		query_string = (
 			'?' + '$$app_token=' + app_token
 			+ '&' + '$select=' + attribute_list
@@ -54,16 +53,12 @@ class SFDataService:
 
 	def parse_response(self, response):
 		if response.status_code == 200:
-			# if []
 			response = json.loads(response.text)
 			open_food_truck_object_collection = []
 			for item in response:
-				food_truck = FoodTruck()
-				food_truck.name = item['applicant']
-				food_truck.address = item['location']
-				# food_truck.day_open = item['dayofweekstr']  # TODO: remove
-				# food_truck.start_time = item['start24']  # TODO: remove
-				# food_truck.end_time = item['end24']  # TODO: remove
+				food_truck = FoodTruck(name=item['applicant'], address=item['location'])
 				open_food_truck_object_collection.append(food_truck)
 		# return list of open food trucks as objects
+		else:
+			return []
 		return open_food_truck_object_collection
