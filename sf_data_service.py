@@ -1,7 +1,7 @@
 import json
 import requests
 import os
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
 from food_truck import FoodTruck
 from date_time_manager import DateTimeManager
 
@@ -25,8 +25,8 @@ class SFDataService:
 
 	# loads and returns the app token we use with SF Data via dotenv module
 	def get_app_token(self):
-		load_dotenv()
-		return os.environ.get('APP_TOKEN') or '' # leave blank if no app token exists
+		load_dotenv(find_dotenv())
+		return os.getenv('APP_TOKEN') or '' # leave blank if no app token exists
 
 	def build_query_collection(self):
 		app_token = self.get_app_token()

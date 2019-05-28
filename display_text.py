@@ -16,9 +16,9 @@ def prompt_user_to_view_more_trucks():
 
 # example formatted_date_time output: 'Sunday May 26, 2019 at 05:11:40 PM'
 def print_date_time_fetched(date_time):
-    formatted_date_time = date_time.strftime("%A %B %d, %Y at %I:%M:%S %p")
-    print(f"(fetched above data from: {formatted_date_time} local SF time)")
-    print('\n')
+	formatted_date_time = date_time.strftime("%A %B %d, %Y at %I:%M:%S %p")
+	print('\n')
+	print(f"... fetching data from: {formatted_date_time} local SF time ...")
 
 def print_valid_food_truck_list(truck_collection):
     print('\n')

@@ -1,1 +1,6 @@
+datetime
+# json - part of python3 standard library
+# os - part of python3 standard library
+python-dotenv
+pytz
 requests
